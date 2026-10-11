@@ -1,0 +1,16 @@
+# 憑證：絕對不能 commit
+youtube-service-account.json
+*service-account*.json
+.env
+.claude/settings.local.json
+
+# Python / uv
+__pycache__/
+*.pyc
+.venv/
+
+# 研究過程的暫存資料
+tmp/
+_site/
+
+.DS_Store
