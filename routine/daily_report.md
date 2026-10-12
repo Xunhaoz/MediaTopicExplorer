@@ -17,6 +17,7 @@
 - YouTube 不需要在環境裡找金鑰。雲端環境的 network secret 會自動補上，直接呼叫即可。如果回 403，就在報告頁尾註明「YouTube 資料缺漏」，其他部分照常完成。
 - YouTube search 一次扣 100 配額，**整個 routine（所有 subagent 合計）控制在 40 次以內**。配額分配見下方各研究員；用不完的不能轉讓，用完就改用 stats／uploads／comments（成本低很多）。
 - PTT 存在的旅遊看板：Japan_Travel、Korea_Travel、Travel、Thailand、Hong_Kong、EuropeTravel。
+- 無頭瀏覽器：雲端環境預裝 Chromium 與 Playwright（`PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers`，不要執行 `playwright install`）。WebFetch／curl 打不開的官方頁（例如觀光庁、國稅庁、EC ETIAS），可用 Playwright 以 `executablePath: '/opt/pw-browsers/chromium'`、`args: ['--no-sandbox']` 開啟後讀取頁面文字。遇到反爬或驗證頁（如 Challenge Validation）就放棄並標「待確認」，不要用偽裝瀏覽器特徵或解驗證的方式繞過；可改用該網站公開提供的下載（如 CSV）或其他來源。
 - 搜尋回傳 0 筆時，換關鍵字（去掉修飾詞、換繁簡／日文原名／英文）至少重試兩次，再判斷是真的沒有供給；不要直接當作「內容缺口」。
 
 ## 團隊分工
