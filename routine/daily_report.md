@@ -7,7 +7,8 @@
 - 服務對象：台灣旅遊社群 @chictrip.tw 的創作者。受眾是台灣自由行旅客，主力日本、韓國，也有泰國、越南、港澳、歐洲、台灣國旅。
 - 日期一律用台灣時間（`TZ=Asia/Taipei date +%F`）。以下 `TODAY` 是今天，「下週」是今天之後的下一個週一到週日，「下月」是下一個日曆月。
 - 研究過程的原始資料放在 `tmp/TODAY/`（已在 .gitignore，不 commit）。
-- 只 commit `reports/travel_topics_TODAY.html` 和 `index.html`，直接 push 到 `main`，不要開 `claude/` 分支或 PR。
+- 只 commit `reports/travel_topics_TODAY.html`、`reports/researched.json` 和 `index.html`，直接 push 到 `main`，不要開 `claude/` 分支或 PR。
+- `reports/researched.json` 是研究過的話題清單（`topics` 陣列，每則有 `title`、50 字內的 `description`、首次研究的 `date`）。產出報告時盡量減少與清單重複的話題。
 - 不要修改 `.claude/skills/`、`scripts/`、`.github/`、`routine/`。
 
 ## 資料來源（skills）
@@ -32,6 +33,7 @@
 - 每份研究檔要有「原始資料」小節，列出實際跑過的查詢（關鍵字、看板、日期區間）和回傳筆數，方便事後檢查覆蓋度。
 - 每個話題旁邊註明資料等級：【量化】有數字證據、【單點】只有一則來源、【推測】分析師的判斷。
 - 回報時最後附「我沒查到但值得追的線索」清單（至少 3 條），給第二波用。
+- 避免重複：開始前先讀 `reports/researched.json`，優先找清單裡沒有的話題。清單裡已有的話題，只有出現明顯的新進展（新日期、新政策、數據大幅升溫）才收錄，並在該則註明「重複：新進展是 …」。
 
 四類話題的定義（所有研究員通用）：
 - 熱門：當下廣泛討論的景點、玩法、購物、文化、特殊體驗。
@@ -83,7 +85,7 @@
 ### 第三波：整合與寫作
 
 1. **總編輯**（1 位）→ `tmp/TODAY/editor_brief.md`
-   - 讀完第一、二波所有檔案，輸出：①跨檔重複話題的合併清單（保留各來源的證據）；②「這週先做」前 5 名與排序理由；③候選熱門依爆紅可能性排序；④來源之間的衝突清單（標待確認）；⑤覆蓋度檢查：各國家／地區、各內容類型的話題數，缺口要寫出來。
+   - 讀完第一、二波所有檔案，輸出：①跨檔重複話題的合併清單（保留各來源的證據）；②「這週先做」前 5 名與排序理由；③候選熱門依爆紅可能性排序；④來源之間的衝突清單（標待確認）；⑤覆蓋度檢查：各國家／地區、各內容類型的話題數，缺口要寫出來；⑥對照 `reports/researched.json` 的重複清單：沒有明顯新進展的重複話題要剔除或降為一行帶過，讓新話題佔多數。
    - 不加入研究檔裡沒有的事實。
 2. **圖文作家**（1 位，總編輯完成後）→ `reports/travel_topics_TODAY.html`
    - 依 `editor_brief.md` 和各研究檔整合成一個 HTML 檔，跨檔案重複的話題合併成一張卡。不加入研究檔裡沒有的事實。
@@ -97,7 +99,8 @@
 
 ## 收尾
 
-1. `python3 scripts/build_index.py`
-2. 確認 `git status` 只有 `reports/travel_topics_TODAY.html` 和 `index.html` 有變更，而且沒有任何憑證或 `tmp/` 檔案。
-3. `git add reports/travel_topics_TODAY.html index.html`，commit 訊息寫 `report: TODAY`，push 到 `main`。
-4. 最後回覆五行內的摘要：今天的前三名題目、各區塊的話題數、缺漏的資料來源。
+1. 更新 `reports/researched.json`：把今天報告裡候選熱門、熱門、趨勢、週期的每則新話題附加到 `topics` 尾端（`title` 用卡片標題，`description` 50 字內，`date` 填 TODAY）。清單裡已有的話題不重複新增。保持合法 JSON、UTF-8、不轉義中文。
+2. `python3 scripts/build_index.py`
+3. 確認 `git status` 只有 `reports/travel_topics_TODAY.html`、`reports/researched.json` 和 `index.html` 有變更，而且沒有任何憑證或 `tmp/` 檔案。
+4. `git add reports/travel_topics_TODAY.html reports/researched.json index.html`，commit 訊息寫 `report: TODAY`，push 到 `main`。
+5. 最後回覆五行內的摘要：今天的前三名題目、各區塊的話題數、缺漏的資料來源。
