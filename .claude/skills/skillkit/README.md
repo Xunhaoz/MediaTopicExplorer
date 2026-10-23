@@ -46,5 +46,6 @@ uv run --project .claude/skills .claude/skills/<skill>/scripts/<skill>.py <指�
 | matcha | 1 | 3 |
 | bubujp | 0.5 | 1 |
 | ptt | 0.8 | 1 |
+| brave | 1 | 1 |
 
 `delay` 是相鄰兩次請求「開始」的最短間隔，跨執行緒共用，所以平行時每秒請求數仍不會超過 `1 / delay`。
